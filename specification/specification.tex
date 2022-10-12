@@ -29,12 +29,12 @@
 
 \pagestyle{plain}
 
-\section{Introduction/Project Statement}
-Within the understanding of how a modern processor works we often look into the underlying code that it runs. However, often being able to visualise
-the operations of a processor are far more beneficial to our understanding than simply emulating the physical code.
+\section{Project Statement}
+Within the understanding of how a modern processor works we often look into the underlying instructions and physical operations it performs. However, often being able to visualise
+those are far more beneficial to our understanding than simply emulating the physical code to produce a result.
 \\\\
 RISC V is a new open source instruction set that has numerous emulators available online with a varying degree of visual elements.
-These all lack the ability to fully visualise the internal operations during each instructions execution. Thus, the aim is to produce a fully fledged RISC V simulator that not only emulates RISC V code but also demonstrates exactly what occurs during execution all the way down to bits of data moving across the processor to their respective components that is compliant with the RISC-V specification \cite{risc_spec}
+These all lack the ability to fully visualise the internal operations during each instruction execution. Thus, the aim is to produce a fully fledged RISC V simulator that not only emulates RISC V code but also visually demonstrates the flow of data during execution all the way down to data moving across the processor to their respective components updating in real-time.
 
 \section{Objectives}
 The first part of this project will be to produce a RISC V emulator built in Java. This will require a deep understanding of each RISC V instruction and how each interacts independently within a processor such that they can be combined to produce a logical flow of instructions producing an output.
@@ -43,12 +43,12 @@ Objectives include:
 \begin{itemize}
     \item A lexical analysis of inputted RISC V code,
     \item A semantic analysis of inputted RISC V code,
-    \item Emulation of the base RV32I instruction set as per the RISC V specification,
-    \item Emulation of the "Standard Extension for Integer Multiplication and Division" instruction set, \label{obj:md}
-    \item Emulation of the "Standard Extension for Single-Precision Floating-Point" instruction set \label{obj:fp}
+    \item Emulation of the base RV32I instruction set \cite{risc_spec} as per the RISC V specification,
+    \item Emulation of the "Standard Extension for Integer Multiplication and Division" instruction set,
+    \item Emulation of the "Standard Extension for Single-Precision Floating-Point" instruction set
 \end{itemize}
 
-The second part of the project will be to fully visualise the emulator into a simulator providing a fully fledged interface to type and load code, as-well as visualise the internal operation of said code as its runs in real-time.
+The second part of the project will be to visualise the emulator into a simulator providing a fully fledged interface to type and load code, as-well as visualise the internal operation of said code as its runs in real-time.
 
 Objectives include:
 \begin{itemize}
@@ -60,12 +60,12 @@ Objectives include:
         \item Addressing requests,
         \item Manipulation of multiple values simultaneously to simulate the effect of processor operations (e.g. addition, subtraction, shifts, etc),
     \end{itemize}
-    \item Control the speed and steps of the simulation both forwards and backwards in time,
+    \item Control the speed and steps of the simulation,
 \end{itemize}
 
 To achieve the set out objectives we will approach the project with 2 main overarching goals:
 \begin{enumerate}
-    \item A minimum viable product that incorporates the base RV64I instruction set and visualisations
+    \item A minimum viable product that incorporates the base RV32I instruction set and visualisations
     \item A fully fledged product including both the Floating point and Multiplication extensions
 \end{enumerate}
 
@@ -73,23 +73,23 @@ And finally an aspirational objective to incorporate more RISC-V extensions depe
 
 
 \section{Methods}
-In order to successfully develop this project I'll be using a dynamic but structured approach, following along with some of the Agile software methodology and parts of a plan driven approach. This will ensure that all deliverables are produced on time and ensure that a constant flow of progress is achieved with goals in mind and targets to hit.
+In order to successfully develop this project we'll be using a dynamic but structured approach, following along with some of the Agile \cite{atlassian_2022_agile} software methodology and parts of a plan driven approach. This will ensure that all deliverables are produced on time and ensure that a constant flow of progress is achieved with goals in mind and targets to hit.
 \\\\
-I'll be supplementing development with a series of notes, thus ensuring everything is done and sufficient documentation can be made later in the year.
+We'll be supplementing development with a series of notes, thus ensuring decisions are tracked and sufficient documentation can be made later in the year.
 
 \subsection{Resources}
-The project will be developed entirely in Java 19. This choice was made due to my long running history of development with Java. Java is also highly maintained and constantly updated and has a world-wide community of people providing support at all levels. Java is also architect independent being compiled into byte code that is then run independently on each target device without having to recompile for each target. This is important or this project as the end program needs to be able to run on a range of devices that prospective users may have.
+The project will be developed entirely in Java 19 \cite{sunmicrosystems_2022_java} using the OpenJDK \cite{oraclecorporation_2022_openjdk} disimplementation. This choice was made due to my long running history of development with Java. Java is also highly maintained and constantly updated and has a world-wide community of people providing support at all levels. Java is also architect independent being compiled into byte code that is then run independently on each target device without having to recompile for each target. This is important or this project as the end program needs to be able to run on a range of devices that prospective users may have.
 \\\\
-To produce the visual front end of the application well be using JavaFX. JavaFX is a more modern GUI library lending itself towards efficient and rapid development which is exactly what I need. Java Swing is also available, however I am more familiar with JavaFX and have already obtained a visual pack called MaterialFX to present a more modern an familiar user interface.
+To produce the visual front end of the application well be using JavaFX \cite{sunmicrosystems_2022_javafx}. JavaFX is a more modern GUI library lending itself towards efficient and rapid development which is exactly what the project needs. Java Swing is also a viable alternative, however being more familiar with JavaFX and have already obtained a visual pack called MaterialFX \cite{palexdev_2022_materialfx} to present a more modern feel, we shall be sticking with JavaFX.
 \\\\
-To develop the application I'll be making use of Intellij IDEA Ultimate. It's an all in one Java IDE, designed to maximise productivity and prove a wealth of support and debugging tools. I am also familiar with Intellij from previous usage and prefer it over other IDE's such as VSCode for Java due to its highly inter-grated tooling and debugging infrastructure.
+To develop the application we'll be making use of Intellij IDEA Ultimate \cite{jetbrains_2022_intellij}. It's an all in one Java IDE, designed to maximise productivity and prove a wealth of support and debugging tools. Intellij is my main IDE of choice for Java projects and from previous usage it's prefered over other IDE's such as VSCode for Java due to its highly inter-grated tooling and debugging infrastructure.
 \\\\
-To ensure thorough testing of the application, I'll be making use of JUnit. JUnit is a testing framework designed for test-driven development and provides a quick and elegant way to produce unit test for all aspects of our application. JUnit is also thoroughly documented and widely used across both the java community and professional development teams.
+To ensure thorough testing of the application, we'll be making use of JUnit \cite{junitteam_2019_junit}. JUnit is a testing framework designed for test-driven development and provides a quick and elegant way to produce unit test for all aspects of our application. JUnit is also thoroughly documented and widely used across both the java community and professional industry.
 \\\\
-Version control will be done via Git and Github with a additional remote on the DCS systems as an extra backup. I have chosen Git over other Version-Control systems due the the fact that I am more familiar with Git and have extended usage of git.
+Version control will be done via Git \cite{git_2022_git} and Github \cite{github_2013_github} with a additional remote on the DCS systems as an extra backup. We have chosen Git over other Version-Control systems due the the fact that I am more familiar with Git and have extended usage of git in the past.
 
 \subsection{Testing}
-Test-driven development (TDD) will be a very important part of the project. As the nature of the project involves emulating individual instructions we can easily apply TDD over all the instructions we aim to implement.
+Test-driven development (TDD) will be a very important part of the project. As the nature of the project involves emulating individual instructions we can easily apply TDD using JUnit \cite{junitteam_2019_junit} over all the instructions we aim to implement.
 \\\\
 Manual testing will also occur for the more visual aspects, in which well ensure that we can visually observe animations taking place at the correct time and in the correct order, also ensuring animated element start and end at the intended place.
 
@@ -127,22 +127,23 @@ Manual testing will also occur for the more visual aspects, in which well ensure
 \section{Risk Assessment}
 There is a relatively small amount of risk associated with the project. By having a minimal viable project goal and then a more fully fledged goal we alleviate any risk of ending up with nothing to show and through the spread out nature of implementing sections we can ensure that the entire project will be completed on time with all goals achieved.
 \\\\
-A possible risk is loosing all code/documentation due to unforeseeable circumstances. However, by making use of Github as a remote and also a remote on DCS, along with zipped backups online I can ensure that there will always be a updated copy of the project available should one become lost, corrupted or unavailable.
+A possible risk is loosing all code/documentation due to unforeseeable circumstances. However, by making use of Github as a remote and also a remote on the Department of Computer Science's server (DCS), along with zipped backups online we can ensure that there will always be a updated copy of the project available should one become lost, corrupted or unavailable.
 
 
 
 \section{Legal, Social, Ethical and Professional Issues}
 RISC-V is free and open with a permissive licence. Encourages all implementations are compliant to specification \cite{risc_spec} 
 \\\\
-Java and its JDK's are available for free use to all users post JDK 16 (we'll be using 19). JavaFX follows the same licence as Java and MaterialFX makes use of the GNU Lesser General Public Licence v3.0 permitting Private and Commercial use.
+Java and its JDK's are available for free use to all users post JDK 16 (we'll be using OpenJDK 19 as OpenJDK has better rights usage compared to OracleJDK). JavaFX follows the same licence as Java and MaterialFX makes use of the GNU Lesser General Public Licence v3.0 \cite{gnu_2022_gnu_lesser_license} permitting Private and Commercial use.
 \\\\
-Within surveying for how users find the program we need to consider who we are surveying and why, ensuring no biases are taken to ensure a comprehensive set of feedback from a range of technical backgrounds, and also ensure that the collected information is stored appropriately and disposed of when no longer required.
+Within surveying for how users find the program we need to consider who we are surveying and why, ensuring no biases are taken to ensure a comprehensive set of feedback from a range of technical backgrounds, and ensure that the collected information is stored appropriately and disposed of when no longer required.
 \\\\
-Professionally I'll be sticking to widely known design principles and a professional manner of commenting, ensuring that all comments are related to the code and meaningful.
+Professionally we'll be sticking to widely known design principles and a professional manner of commenting, ensuring that all comments are meaningful.
 
 
-\bibliographystyle{plain}
-\bibliography{common/bibliography}
+
+
+\printbibliography
 
 
 
