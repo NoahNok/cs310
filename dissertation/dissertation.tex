@@ -8,7 +8,7 @@
 \toggletrue{IsDissertation}
 
 %%%%%%%%%%%%%%%%%%%%
-
+\usepackage{acronym}
 \pagestyle{plain}
 \renewcommand{\headrulewidth}{0.0pt}
 
@@ -30,18 +30,46 @@
 
 \pagestyle{plain}
 
-\input{abstract.tex}
+\begin{abstract}
+    Visual simulation of computer architectures is hard to come by and often hard to follow. Older architectures have amble education aids available, whereas newer architectures such as RISC-V lack them.
+    \\\\
+    A simulation should provide a healthy compromise between usability and understanding, providing a comprehensive look inside an architectures workings, without becoming convoluted.
+    \\\\
+    This project aims to produce a simple, yet informative simulator for the RISC-V architecture that is accessible to both amateurs and professionals alike, with a focus on the core aspects, whilst providing user extensibility.
+    \\\\
+    \textbf{Keywords:} RISC-V, Java, Simulator, Educational, Visualisation
+\end{abstract}
+\renewcommand*\abstractname{Acknowledgements}
+\begin{abstract}
+I would like to first thank Adam Chester for proposing the project concept, and then my supervisor Richard Kirk, for taking over so quickly and taking such an interest after Adam left the department, providing constructive feedback to help keep the project heading in the right direction.
+
+I would also like to thank my friends and course-mates for helping test and provide feedback on the final application, and further my parents for proofreading this report.
+\end{abstract}
+
+\renewcommand*\abstractname{Abbreviations}
+\begin{abstract}
+\begin{acronym}
+\acro{ALU}{Arithmetic Logic Unit}
+\acro{CISC}{Complex Instruction Set Computer}
+\acro{RISC}{Reduced Instruction Set Computer}
+\acro{UI}{User Interface}
+\acro{WYSIWYG}{What You See Is What You Get}
+\end{acronym}
+\end{abstract}
 
 \tableofcontents
 
-\input{introduction.tex}
-\input{background.tex}
-\input{design.tex}
-\input{implementation.tex}
-\input{evaluation.tex}
-\input{conclusions.tex}
+\input{dissertation/1_introduction}
+\input{dissertation/2_research.tex}
+\input{dissertation/3_requirements.tex}
+\input{dissertation/4_design.tex}
+\input{dissertation/5_implementation.tex}
+\input{dissertation/6_testing.tex}
+\input{dissertation/7_project_management.tex}
+\input{dissertation/8_evaluation.tex}
+\input{dissertation/9_conclusions.tex}
 
-\bibliographystyle{../common/plainnat}
-\bibliography{../common/bibliography}
+
+\printbibliography
 
 \end{document}

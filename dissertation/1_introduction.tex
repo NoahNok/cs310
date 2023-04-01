@@ -1,0 +1,21 @@
+\chapter{Introduction}
+\label{ch:introduction}
+Within the understanding of how a modern processor operates, we often look into the underlying execution and physics operations performed. Often, being able to visualise this operations is far more beneficial to our understanding than simply digesting written information or observing the output of emulated code. A visualisation also provides educational benefits, with visual aids helping to increase the understanding of complex material and help reinforce meaning where written material lacks the ability to.
+
+RISC-V \cite{waterman_2019_the} is open source load-store instruction set architecture that has been gaining traction since its major release in 2015. However, despite being only 7 years old and being currently heavily explored, the range of educational tools available to visualise its physical operation are limited. Often limited to just a basic output after emulation. Further, out of the limited tools available, they are burdened with being unintuitive for users with no knowledge of RISC-V.
+
+Thus, the project aims to build up a Simulation tool (including Visualisation and Emulation) for RISC-V from the ground up to provide a tool for individuals and educators to increase their understanding of RISC-V through a visual approach.. Following the RISC-V specification \cite{waterman_2011_the} mostly to provide a rigid understanding, whilst keeping a simplified approach to avoid overburdening the end user.
+
+RISC-V provides a 32 bit base specification to use, however the specification also provides extensions. These exist so that RSIC-V may incorporate more modern features to improve performance and increase capability. Some of these extensions include: Multiply and Divide, and Floating Point Extensions. An addition to the project would be to include some of these basic extensions within the final application to provide a wider range of simulation. This could be approached in multiple ways, two of which may be to directly hard-code them into the core application to provide a concrete and reliable implementation of extensions, or to provide them as additional modules via a module system supplying a simple method to load and unload modules to add/remove complexity, whilst enabling future modules to be created independently of the base application. Of these two cases, the modular approach is the most appropriate, allowing for its mentioned benefits and ability to split up the whole project into smaller chunks.
+
+\section{Emulator vs Simulator}
+It is important to establish the difference between a \textbf{Emulator} and a \textbf{Simulator}, as both are referenced through this report. With a \textbf{Simulator} in essence encapsulating a \textbf{Emulator}.
+
+\subsection{Emulator}
+An Emulator aims to reproduce and mimic its target, in our case we will emulate RISC-V code as if it were being run on a physical RISC-V chip.
+
+For example, older games are emulated to be run on newer hardware due to the original being hard to obtain or missing. Only the game is recreated with nothing else included.
+\subsection{Simulator}
+A Simulator aims to model the target, in this case it may include emulation of the target and then model on top of this emulation.
+
+For example, many Flight Simulators exist. They emulate the operation of a plane, and include all the details with how to interact with it, from physical buttons to 3D rendering to represent what happens in reality.
