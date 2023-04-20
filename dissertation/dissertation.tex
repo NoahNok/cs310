@@ -2,12 +2,13 @@
 
 %%%%%%%%%%%%%%%%%%%%
 
-\input{../common/common.tex}
-\input{../common/project.tex}
+\input{common/common.tex}
+\input{common/project.tex}
 
 \toggletrue{IsDissertation}
 
 %%%%%%%%%%%%%%%%%%%%
+\usepackage{enumitem}
 \usepackage{acronym}
 \pagestyle{plain}
 \renewcommand{\headrulewidth}{0.0pt}
@@ -26,7 +27,7 @@
 
 \begin{document}
 
-\input{../common/titlepage.tex}
+\input{common/titlepage.tex}
 
 \pagestyle{plain}
 
@@ -51,6 +52,9 @@ I would also like to thank my friends and course-mates for helping test and prov
 \begin{acronym}
 \acro{ALU}{Arithmetic Logic Unit}
 \acro{CISC}{Complex Instruction Set Computer}
+\acro{CU}{Control Unit}
+\acro{ID}{Instruction Decoder}
+\acro{IR}{Instruction Register}
 \acro{RISC}{Reduced Instruction Set Computer}
 \acro{UI}{User Interface}
 \acro{WYSIWYG}{What You See Is What You Get}
@@ -70,6 +74,36 @@ I would also like to thank my friends and course-mates for helping test and prov
 \input{dissertation/9_conclusions.tex}
 
 
-\printbibliography
+\appendix
+\chapter{Timetable}\label{app:timetable}
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1\textwidth]{dissertation/DATA/t1.png}
+    \caption{Term 1 Timetable}
+    \label{fig:tt_t1}
+\end{figure}
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1\textwidth]{dissertation/DATA/t2.png}
+    \caption{Term 2 Timetable}
+    \label{fig:tt_t2}
+\end{figure}
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.8\textwidth]{dissertation/DATA/chr.png}
+    \caption{Christmas Timetable}
+    \label{fig:tt_christmas}
+\end{figure}
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.8\textwidth]{dissertation/DATA/east.png}
+    \caption{Easter Timetable}
+    \label{fig:tt_easter}
+\end{figure}
 
+\chapter{Specification}
+
+\chapter{Progress Report}
+
+\printbibliography
 \end{document}

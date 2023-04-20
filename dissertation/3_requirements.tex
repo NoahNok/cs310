@@ -1,26 +1,34 @@
+
 \chapter{Requirements}
 \label{ch:requirements}
 The projects objectives are split into two parts: Emulation and Visualisation. This decision was made due to the emulation being the core of the system, and without it any form of visualisation would be useless, with the visualisation depending on specific emulation outputs.
 
 Our requirements follow the MoSCoW method, in which each requirement is denoted as either \textbf{Must}, \textbf{Should}, \textbf{Could} or \textbf{Would}, allowing us to produce a prioritised list of requirements, focusing on the \textbf{Must's} first ensuring core parts of the project are implemented first, without straying to implement unnecessary additions that can be done towards the end.
 
-\begin{enumerate}
-    \item \textbf{(M)} Emulation of the base instruction set: RV32I \cite{waterman_2019_the} (The base 32 bit implementation of RISC-V), as per the RISC-V specification,
-    \item \textbf{(M)} A lexical analysis of inputted RISC-V code to ensure proper syntax is used and inputted code can be successfully parsed,
-    \item \textbf{(S)} A semantic analysis of inputted RISC-V code to ensure that lexically valid code also conforms the expected values of any given instruction,
-    \item \textbf{(C)} Loop control via labelled functions
+\textbf{Emulation Requirements}
+\begin{enumerate}[label={E\theenumi}]
+    \item \label{req:e1} \textbf{(M)} Emulation of the base instruction set: RV32I \cite{waterman_2019_the} (The base 32 bit implementation of RISC-V), as per the RISC-V specification,
+    \item \label{req:e2} \textbf{(M)} A lexical analysis of inputted RISC-V code to ensure proper syntax is used and inputted code can be successfully parsed,
+    \item \label{req:e3} \textbf{(S)} A semantic analysis of inputted RISC-V code to ensure that lexically valid code also conforms the expected values of any given instruction,
+    \item \label{req:e4} \textbf{(C)} Loop control via labelled functions
     \item \label{req:md} \textbf{(S)} Emulation of the "Standard Extension for Integer Multiplication and Division" extension,
     \item \label{req:fp} \textbf{(C)} Emulation of the "Standard Extension for Single-Precision Floating-Point" extension,
-    \item \textbf{(M)} A visualisation of data moving across the processor using JavaFX \cite{sunmicrosystems_2022_javafx},
-    \item \textbf{(C)} A visualisation of instructions being accessed and decoded using JavaFX \cite{sunmicrosystems_2022_javafx},
-    \item \textbf{(M)} A comprehensive system allowing for the display of data moving around the processor including:
+ 
+    \item \label{req:e7} \textbf{(M)} The code-base will be well documented with maintainable code
+\end{enumerate}
+
+
+\textbf{Visualisation Requirements}
+\begin{enumerate}[label={V\theenumi}]
+       \item \label{req:v1} \textbf{(M)} A visualisation of data moving across the processor using JavaFX \cite{sunmicrosystems_2022_javafx},
+    \item \label{req:v2} \textbf{(C)} A visualisation of instructions being accessed and decoded using JavaFX \cite{sunmicrosystems_2022_javafx},
+    \item \label{req:v3} \textbf{(M)} A comprehensive system allowing for the display of data moving around the processor including:
     \begin{enumerate}
-        \item \textbf{(M)} Numerical data moving from memory to other components and vice-versa,
-        \item \textbf{(S)} Addressing requests,
-        \item \textbf{(C)} Manipulation of multiple values simultaneously to simulate the effect of processor operations (e.g. addition, subtraction, shifts, etc),
-        \item \textbf{(M)} Control of animation speed
-        \item \textbf{{C}} Instruction stepping
+        \item \label{req:v3_a} \textbf{(M)} Numerical data moving from memory to other components and vice-versa,
+        \item \label{req:v3_b} \textbf{(S)} Addressing requests,
+        \item \label{req:v3_c} \textbf{(C)} Manipulation of multiple values simultaneously to simulate the effect of processor operations (e.g. addition, subtraction, shifts, etc),
+        \item \label{req:v3_d} \label{req:speed} \textbf{(M)} Control of animation speed
+        \item \label{req:v3_e} \textbf{(C)} Instruction stepping
     \end{enumerate}
-    \item \textbf{(M)} The code-base will be well documented with maintainable code
 \end{enumerate}
 

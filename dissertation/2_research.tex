@@ -1,7 +1,19 @@
 \chapter{Research}
 \label{ch:research}
 
-For the project to be successful, research needs to be done on a range of topics including most notably RISC-V, as-well as other considered architectures, implementation languages and existing solutions. These are all discussed in the following sections.
+For the project to be successful, research needs to be done on a range of topics including most notably RISC-V, as-well as other considered architectures, implementation languages and existing solutions. These are all discussed in the following sections, but first we must quickly discuss the difference between a Simulator and Emulator to avoid any confusion.
+
+\section{Emulator vs Simulator}\label{sec:sim_vs_em}
+It is important to establish the difference between a \textbf{Emulator} and a \textbf{Simulator}, as both are referenced through this report. With a \textbf{Simulator} in essence encapsulating a \textbf{Emulator}.
+
+\subsection{Emulator}
+An Emulator aims to reproduce and mimic its target, in our case we will emulate RISC-V code as if it were being run on a physical RISC-V chip.
+
+For example, older games are emulated to be run on newer hardware due to the original being hard to obtain or missing. Only the game is recreated with nothing else included.
+\subsection{Simulator}
+A Simulator aims to model the target, in this case it may include emulation of the target and then model on top of this emulation.
+
+For example, many Flight Simulators exist. They emulate the operation of a plane, and include all the details with how to interact with it, from physical buttons to 3D rendering to represent what happens in reality.
 
 \section{Architecture}
 The project itself could of been produced for any architecture, thus it was important to consider a few different architectures and the pros and cons of each when producing a simulator. The project settled on one of RISC-V \cite{waterman_2019_the} , x86 \cite{intelcorporation_2023_intel} and ARM \cite{armltd_2023_defining}, which are discussed below, with RISC-V being chosen in the end thanks to its open-source nature with ample implementation material online, and being relatively current such that the end project will be useful in the indefinite future as both an education tool and a exploration tool..
@@ -83,7 +95,7 @@ It is important to consider the strengths and weaknesses of current solutions to
 The project aim to combine the pro's of the below solutions whilst trying to avoid as many of the cons as possible, to produce a well rounded solution that is accessible to all, whilst providing a deeper level of understanding without becoming cluttered or limited to specific instruction sets.
 
 \subsection{LittleManComputer}\label{sec:lmc}
-\begin{figure}[h]
+\begin{figure}[H]
     \centering
     \includegraphics[width=0.75\linewidth]{dissertation/DATA/LMC.jpg}
     \caption{LittleManComputer Simulator by Peter Higginson}
@@ -91,14 +103,14 @@ The project aim to combine the pro's of the below solutions whilst trying to avo
 \end{figure}
 LittleManComputer \cite{higginson_2014_little} is a instructional model of the computer created in 1965. In 2014, Peter Higginson created a visual simulator \cite{higginson_2014_little} for LMC.
 
-Built purely in JavaScript, it provides a simple interface to visualise the interactions of LMC as instructions manipulate data flowing around the registers and memory.
+Built purely in JavaScript, it provides a simple interface to visualise the interactions of LMC as instructions manipulate data flowing around the registers and memory. The overall visualisation it provides is fairly intuitive to follow, simple and to the point, with no unnecessary additions or complexity. As a result it accessible to a wider range of users with less of a learning curve, complete with a conclusive help documentation.
 
 \begin{table}[h]
 \begin{tabular}{|p{0.5\linewidth} | p{0.5\linewidth}|}\hline
 \textbf{Pros}                                                     & \textbf{Cons}                             \\\hline
 Simple to understand and follow                                   & Not based on RISC-V                       \\\hline
 Applicable to all age ranges, younger user will have little issue & Too simplistic for our use                \\\hline
-Supports text I/O                                                 & Doesn't operate on registers, only memory \\\hline
+Supports text I/O                                                 & Limited register operations \\\hline
 \end{tabular}
 \end{table}
 
@@ -110,6 +122,8 @@ Supports text I/O                                                 & Doesn't oper
     \label{fig:emulsiv}
 \end{figure}
 Emulsiv \cite{savaton_2023_eseotechemulsiv} is a web based RISC-V simulator. It was produced by Guillaume Savaton for ESEO (a French Electronic and Engineering School) to help students understand the inner workings of a RISC-V processor. 
+
+Emulsiv provides a sophisticated visualisation of the processor whilst still being easy to follow. However, animations don't follow the drawn path between components, instead choosing to drift across the screen, whilst highlighting the respective path which may be confusing for some users. Emulsiv also provide a lot of detail on screen, which while useful, may also be a burden for those less familiar with RISC-V, posing as a deterrent from using the simulator.
 
 \begin{table}[h]
 \begin{tabular}{|p{0.5\linewidth} | p{0.5\linewidth}|}
@@ -129,7 +143,9 @@ Simple design and animations                          & Overall usage is somewha
     \label{fig:cornell}
 \end{figure}
 
-The Cornell RISC-V Interpreter \cite{cornelluniversity_riscv} was made for the Cornell University CS3410 course. It provides a simple web interface to interpret RISC-V code showing a display of the register and memory changes only, whilst supporting a subset of the base 32 bit instruction set.
+The Cornell RISC-V Interpreter \cite{cornelluniversity_riscv} was made for the Cornell University CS3410 course. It provides a simple web interface to interpret RISC-V code showing a display of the register and memory changes only.
+
+Unfortunately, it only supports a subset of the base 32 bit implementation which greatly limits its potential, however this decision does provide the benefit of constraining the system to a simpler form that is easier for those new to RISC-V to explore without having the option of many other instructions being present, instead focusing on the core load-store nature of RISC-V.
 
 \begin{table}[h]
 \begin{tabular}{|p{0.5\linewidth} | p{0.5\linewidth}|}
@@ -151,6 +167,8 @@ Simple design and animations                          & Overall usage is somewha
 \end{figure}
 rvemu \cite{doi_2021_d0iasmrvemu} is a RISC-V emulator created by Asami Doi in Rust. It provides a CLI interface to load and emulate written RISC-V code. It supports the full 64 bit implementation and many of the 64 bit extensions. However, it provides no visualisation whatsoever other than the end results of a scripts execution.
 
+As a result of providing no visualisation rvemu is very efficient and can emulate large scale RISC-V programs with ease, which is ideal for cases where a prospective user only wishes to know the final result. By supporting many of the 64 bit extensions, it provides a capability to emulate significantly more advanced programs than other simulators focused more on visualisation aspects. However, more technical users may wish for a visualisation of these more complex extensions, which it provides a lack off, which is something to consider for the project in terms of how complex visualisation becomes and to what extend we visualise extensions.
+
 \begin{table}[H]
 \begin{tabular}{|p{0.5\linewidth} | p{0.5\linewidth}|}
 \hline
@@ -162,3 +180,22 @@ Allows stepping of instructions, and to simulate at different speeds & No visual
 \end{tabular}
 \end{table}
 
+\section{Nielson Usability Heuristics}\label{sec:nielson}
+Our design should be easy to use and well structured, however a was to measure this is required, to ensure that what we think is acceptable actually is in the real world.
+
+The Nielsen Usability Heuristics \cite{nielsen_2020_10} denote 10 principles for \ac{UI} design, and are treated as a rule of thumb and not specific guidelines. The 10 principles (as copied from the website \cite{nielsen_2020_10}) are:
+
+\begin{enumerate}
+    \item Visibility of system status - The design should always keep users informed about what is going on, through appropriate feedback within a reasonable amount of time.
+    \item Match between system and the real world - The design should speak the users' language. Use words, phrases, and concepts familiar to the user, rather than internal jargon. Follow real-world conventions, making information appear in a natural and logical order.
+    \item User control and freedom - Users often perform actions by mistake. They need a clearly marked "emergency exit" to leave the unwanted action without having to go through an extended process.
+    \item Consistency and standards - Users should not have to wonder whether different words, situations, or actions mean the same thing. Follow platform and industry conventions.
+    \item Error prevention - Good error messages are important, but the best designs carefully prevent problems from occurring in the first place. Either eliminate error-prone conditions, or check for them and present users with a confirmation option before they commit to the action.
+    \item Recognition rather than recall - Minimise the user's memory load by making elements, actions, and options visible. The user should not have to remember information from one part of the interface to another. Information required to use the design (e.g. field labels or menu items) should be visible or easily retrievable when needed.
+    \item Flexibility and efficiency of use - Shortcuts, hidden from novice users, may speed up the interaction for the expert user so that the design can cater to both inexperienced and experienced users. Allow users to tailor frequent actions.
+    \item Aesthetic and minimalist design - Interfaces should not contain information that is irrelevant or rarely needed. Every extra unit of information in an interface competes with the relevant units of information and diminishes their relative visibility.
+    \item Help users recognise, diagnose, and recover from errors - Error messages should be expressed in plain language (no error codes), precisely indicate the problem, and constructively suggest a solution.
+    \item Help and documentation - It's best if the system doesn't need any additional explanation. However, it may be necessary to provide documentation to help users understand how to complete their tasks.
+\end{enumerate}
+
+Other principle concepts exist, often be a re-amalgamation of Nielsons, to focus on specific areas of \ac{UI} design, with most aiming for consistency as in principle 4, simplicity and focusing on the user by placing them at the centre of design \cite{uxpin_2020_the}.
