@@ -1,6 +1,6 @@
 \chapter{Evaluation}
 \label{ch:evaluation}
-It is important to evaluate the project against our original requirements in Chapter \ref{ch:requirements} and expectations to determine the outcome of the project. To evaluate the project we'll start by evaluating our completion of the original requirements, then evaluating the simulators 3 main components of Emulating, Visualising and the Module System then evaluation the project management and finally discussing some limitations of the project.
+It is important to evaluate the project against our original requirements in Chapter \ref{ch:requirements} and expectations to determine the outcome of the project. We'll start by evaluating our completion of the original requirements, then the simulators 3 main components of Emulating, Visualising and the Module System, then evaluation the project management and finally discussing some limitations of the project.
 
 \section{Requirement Evaluation}
 The majority of requirements have been met and implemented, with a few lower priority requirements not met.
@@ -8,7 +8,7 @@ The majority of requirements have been met and implemented, with a few lower pri
 \subsection{Emulation Requirements}
 For the emulation, requirements \ref{req:e1}, \ref{req:e2}, \ref{req:e3}, \ref{req:md}, \ref{req:fp} and \ref{req:e7} have been fully completed with the full functionality found within the emulation of RISC-V code.
 
-Requirements \ref{req:e2} and \ref{req:e3} are fully implemented, however they could benefit from more work to provide are more comprehensive lexical and semantic analysis with additional feedback available for specific cases, as well as possibly including more highlighting for incorrect syntax and grammatical errors.
+Requirements \ref{req:e2} and \ref{req:e3} are fully implemented, however they could benefit from additional work to provide more comprehensive lexical and semantic analysis with additional feedback available for specific cases, as well as possibly including more highlighting for incorrect syntax and grammatical errors.
 
 Unfortunately \ref{req:e4} was never implemented. It was specified as a "Should" requirement meaning it wasn't originally considered as a required feature. However, this is something that can be included later and postponed to the future work section (Section \ref{sec:future_work}).
 
@@ -22,17 +22,17 @@ Sub-requirement \ref{req:v3_c} has been partially implemented, with the ability 
 Instruction stepping is a more advanced feature that is possible to add with the current implementation, however the focus of the project shifted onto building a robust simulator with a consistent linear simulation sequence. As a result of the slider implementation, it is is possible to artificially create a stepping feature by manually pausing the animation after each instruction as executed. With the requirement being denoted as a "Could" it was also much further down the list of priorities, and like requirement \ref{req:e4}, it can be included as a later addition for future work.
 
 \section{Component Evaluation}
-During the development of the project, the project has always been split into three independent components being the Emulator, Visualisation and then the Module System. As the nature of each section differs, all three will be discussed individually below:
+During its development, the project has always been split into three independent components being the Emulator, Visualisation and then the Module System. As the nature of each section differs, all three will be discussed individually below:
 
 \subsection{Emulation}
-The resulting emulation system is very robust and concrete. Due the the well created design and following implementation, the emulator works as expected and produces a correct emulation of all the implemented RISC-V \cite{riscv_2015_riscv} instructions. Further it gracefully handles errors from a wide array of sources, from lexical errors, to internal emulation logic errors arising at any point.
+The resulting emulation system is very robust and concrete. Due to the the well created design and following implementation, the emulator works as expected and produces a correct emulation of all the implemented RISC-V \cite{riscv_2015_riscv} instructions. Further it gracefully handles errors from a wide array of sources, from lexical errors, to internal emulation logic errors arising at any point.
 
 The emulation is also well produced, with a simple way to interact with it outside of the visualisation. Thanks to this, external systems may easily implement and emulate RISC-V code without having to hook into the front end. Instead they can directly hook into the emulator. This was not originally intended, but exists as the result of careful planning and execution resulting in this additional feature.
 
 \subsection{Visualisation}
 The visualisation is complete, but is a part of the project that can be continuously iterated upon indefinitely to add new features and abilities as well as streamlining existing features.
 
-The current visualisation is well presented and easy to follow, providing a simple and intuitive understanding of the processor flow, without providing too much information at once. From the start to the end of the project, the visualisation layout has remained fairly consistent with a few major changes like than considerations for accessibility, and the resulting implementation is perfect for the use case of the simulator and a success.
+The current visualisation is well presented and easy to follow, providing a simple and intuitive understanding of the processor flow, without providing too much information at once. From the start to the end of the project, the visualisation layout has remained fairly consistent with a few major changes and considerations for accessibility, with the resulting implementation perfect for the use case of the simulators success.
 
 \subsection{Module System}
 The Module system was somewhat an afterthought for the project, materialising part way through the project. Despite this it has played an imperative part in making the project extendable beyond initial expectations. The system provides a simple way for anyone to extend the simulator in both emulation and visualisation aspects without restrictions to just the project developer.
@@ -42,7 +42,7 @@ As a result of the module system the original RISC-V extensions were successfull
 As a result the Module system has been an important addition to the project and should of been considered from the very beginning instead of part way through the project. 
 
 \section{Project Management}
-The execution of the project has been relatively flawless. The choice of following the Agile \cite{atlassian_2022_what} methodology has proven to be the correct choice. The backlog of tasks allowed more important aspect to be complete first, with less important tasks moved lower down, with the ability to re-priorities with ease.
+The execution of the project has been relatively flawless. The choice of following the Agile \cite{atlassian_2022_what} methodology has proven to be the correct choice. The backlog of tasks allowed more important aspect to be complete first, with less important tasks moved lower down, with the ability to re-prioritise with ease.
 
 Through the following of the planned timetable, continuous development was performed with a clear layout as to what to work on each week. Combined with weekly/fortnightly supervisor meetings, the project flowed well with the ability to discuss designs, implementation and run through decisions. Whilst suggesting changes and providing critical feedback to help steer the project in the right direction.
 
@@ -51,11 +51,11 @@ Further, the use of testing allowed for faster development, ensuring that featur
 \section{Limitations}
 The project is not without its limitations. Thankfully only a few limitations have been identified, all of which can be overcome in time:
 \begin{itemize}
-    \item The implementation of the base 32 bit instructions set is not complete, missing the Jump \& Link, Synch and Environment instructions, as well as all Control Status Register operations. This decision was made to provide a simpler set of instructions for newer users, and reduced the complexity of the overall emulation. However it is possibly to extend wither the base system or create an extension module to encapsulate these missing instructions in the future.
+    \item The implementation of the base 32 bit instructions set is not complete, missing the Jump \& Link, Synch and Environment instructions, as well as all Control Status Register operations. This decision was made to provide a simpler set of instructions for newer users, and reduced the complexity of the overall emulation. However it is possible to extend either the base system or create an extension module to encapsulate these missing instructions in the future.
 
     \item The module system exposes the internal classes to external developers creating custom modules. Whilst not detrimental, this should be avoided by providing developers with a reduced jar exposing only the API interface. As inexperienced developers may interact directly with the core code causing unintended issues or bugs.
 
-    \item The packages application must be run via the command line in its current stage, which limits accessibility to younger users and less technically inclined users. This should be rectified by producing a executable installer that installs and executes the application like consumers have come to expect.
+    \item The packages application must be run via the command line in its current stage, which limits accessibility to younger users and less technically inclined users. This should be rectified by producing an executable installer that installs and executes the application like consumers have come to expect.
 \end{itemize}
 
 

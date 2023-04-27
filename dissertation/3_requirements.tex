@@ -1,15 +1,15 @@
 
 \chapter{Requirements}
 \label{ch:requirements}
-The projects objectives are split into two parts: Emulation and Visualisation. This decision was made due to the emulation being the core of the system, and without it any form of visualisation would be useless, with the visualisation depending on specific emulation outputs.
+The projects objectives are split into two parts: Emulation and Visualisation. This decision was made due to the emulation being the core of the system. Without it, any form of visualisation would be obsolete, as the visualisation depends highly on specific emulation outputs.
 
-Our requirements follow the MoSCoW method, in which each requirement is denoted as either \textbf{Must}, \textbf{Should}, \textbf{Could} or \textbf{Would}, allowing us to produce a prioritised list of requirements, focusing on the \textbf{Must's} first ensuring core parts of the project are implemented first, without straying to implement unnecessary additions that can be done towards the end.
+Our requirements follow the MoSCoW method, in which each requirement is denoted as either \textbf{Must}, \textbf{Should}, \textbf{Could} or \textbf{Would}, allowing us to produce a prioritised list of requirements, focusing on the \textbf{Must's} first. Thus, ensuring core parts of the project are implemented first, without straying to implement unnecessary additions that can be implemented later.
 
 \textbf{Emulation Requirements}
 \begin{enumerate}[label={E\theenumi}]
     \item \label{req:e1} \textbf{(M)} Emulation of the base instruction set: RV32I \cite{waterman_2019_the} (The base 32 bit implementation of RISC-V), as per the RISC-V specification,
     \item \label{req:e2} \textbf{(M)} A lexical analysis of inputted RISC-V code to ensure proper syntax is used and inputted code can be successfully parsed,
-    \item \label{req:e3} \textbf{(S)} A semantic analysis of inputted RISC-V code to ensure that lexically valid code also conforms the expected values of any given instruction,
+    \item \label{req:e3} \textbf{(S)} A semantic analysis of inputted RISC-V code to ensure that lexically valid code also conforms to the expected values of any given instruction,
     \item \label{req:e4} \textbf{(C)} Loop control via labelled functions
     \item \label{req:md} \textbf{(S)} Emulation of the "Standard Extension for Integer Multiplication and Division" extension,
     \item \label{req:fp} \textbf{(C)} Emulation of the "Standard Extension for Single-Precision Floating-Point" extension,

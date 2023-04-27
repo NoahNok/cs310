@@ -1,13 +1,13 @@
 \chapter{Conclusions}
 \label{ch:conclusions}
-The goal of the project was to produce a simulator for RISC-V \cite{riscv_2015_riscv} to provide a interactive platform to improve a users understanding of how a RISC-V processor works. The resulting application provides this functionality and more as a result of careful panning and execution with the additional modules system providing further extensibility beyond original considerations. As a result the project has been a success.
+The goal of the project was to produce a simulator for RISC-V \cite{riscv_2015_riscv} to provide a interactive platform to improve a users understanding of how a RISC-V processor works. The resulting application provides this functionality and more as a result of careful planning and execution with the additional modules system providing further extensibility beyond original considerations. As a result the project has been a success.
 
 Within the project a full simulator has been built from the ground up from the concept of a emulator linking into a visualisation system. Then with the addition of the Module System providing a simple way to extend the system further. The project allows users to enter RISC-V \cite{riscv_2015_riscv} assembly code and visually observe how an implementation of the architecture may move data between the physical components and interact with the registers and memory. Whilst the project does have a few previously motioned limitations, these can all be resolved with future work and maintenance.
 
 \section{Future work}\label{sec:future_work}
 With the project being a simulator, there is no end of possibilities for future work in terms of adding additional visualisation options, as well as implementing the available RISC-V \cite{riscv_2015_riscv} extensions available.
 
-Below, well discuss all the possible bits of future work:
+Below, we'll discuss all the possible bits of future work:
 
 \subsection{Implementing the Rest of the Base Instruction Set}
 It would be ideal to complete the base instruction set implementation. Including the missing Control Status Flag, Synch, Environment and Jump \& Link instructions so that more complex programs can be written by more advanced users. Currently these instructions wont be recognised by the program. However, they can be added by a module in the future, or directly into the base program. 
@@ -15,7 +15,7 @@ It would be ideal to complete the base instruction set implementation. Including
 \subsection{Additional Modules}
 Currently other than the base instruction set, only 2 additional sets have been implemented: Multiply and Divide and Single Precision Floating Point. 
 
-It would be beneficial to implement more of the extensions such 64 bit integer support, double and quad precision floating point and more complex instruction sets such as vector operations and atomic instructions. 
+It would be beneficial to implement more of the extensions such as 64 bit integer support, double and quadruple precision floating point and more complex instruction sets such as vector operations and atomic instructions. 
 
 Implementing these modules would provide more ways to interact with the application and provide more visualisations of how more complex instructions operate within the processor. However these may require additional tooling to implement with changes required to the module interface to implement.
 
@@ -24,8 +24,8 @@ Both Labelled looping and Stepping are requirements that were never complete. St
 
 Labelled looping would permit the ability to call blocks of code, allowing for more complex execution and the somewhat creation of named functions, rather than currently changing the program counter value by a relative amount.
 
-\subsection{Better Syntax and Lexical Feedback}
-Currently the syntax and lexical feedback is limited, but effective. It would be nice to improve this to add highlighting to the code editor to allow for quicker identifying of issues, rather than relying on a alert box to inform the user.
+\subsection{Enhanced Syntax and Lexical Feedback}
+Currently the syntax and lexical feedback is limited, but effective. It would be nice to improve this to add highlighting to the code editor to allow for quicker identifying of issues, rather than relying on an alert box to inform the user.
 
 This would aim to include highlighting affected rows, highlighting specific parts of rows, and underling invalid parts as most other integrated development environments do.
 

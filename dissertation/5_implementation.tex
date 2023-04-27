@@ -20,8 +20,8 @@
 
 \chapter{Implementation}
 \label{ch:implementation}
-The project has been implemented in 3 stages, similar to the 3 sections of our design. These are: The Emulator described in Chapter \ref{sec:impl_emul}, Visualisation in Chapter \ref{sec:impl_vis} and the Module System in Chapter \ref{sec:impl_mod}. 
-
+The project has been implemented in 3 stages, similar to the 3 sections of our design. These are: The Emulator described in Section \ref{sec:impl_emul}, Visualisation in Section \ref{sec:impl_vis} and the Module System in Section \ref{sec:impl_mod}. And further, the Integration and Additional Features in Sections \ref{sec:impl_integ} and \ref{sec:add_feat} respectively.
+ 
 The module system was a later addition to the project, hence its separate design and implementation sections, instead of being directly implemented from the beginning, its respective changes and alterations to the implementation are discussed in its respective section.
 
 First a few bits of terminology should be covered:
@@ -35,10 +35,10 @@ First a few bits of terminology should be covered:
 \section{Emulator}\label{sec:impl_emul}
 At its base the emulator provides implementations of the core components to emulate RISC-V instructions. These are representations of physical register, memory and instructions. These three allow us to completely emulate any RISC-V instruction. A further part of the emulator is the parser, which provides essentially functionality to covert user written programs into a representation the emulator can understand.
 
-Below, each of the 3 core components is discussed as well as the other relevant details allowing for the complete implementation of the emulator.
+Below, each of the 3 core components are discussed as well as the other relevant details allowing for the complete implementation of the emulator.
 
 \subsection{Binary Class}
-Originally the emulator stored the respective binary values of register and memory values as a integer, due to the fact that RISC-V deals with 32 it twos-compliment numbers, and Java's integer is also 32 bit twos-compliment. Whilst some instructions suited this making use of just basic arithmetic operations, it was quickly noted that instructions started to operate on the binary form.
+Originally the emulator stored the respective binary values of register and memory values as an integer, due to the fact that RISC-V deals with 32 bit twos-compliment numbers, and Java's integer is also 32 bit twos-compliment. Whilst some instructions suited this making use of just basic arithmetic operations, it was quickly noted that instructions started to operate on the binary form.
 
 It was decided to switch to a more intuitive representation as noted in our design in Figure \ref{fig:bin_regmem_uml}, by creating a custom \texttt{Binary} class. This class holds a string representing the 32 ones and zeros making up the value, which can then be retrieved as denary, hex or the binary value itself.
 
@@ -66,7 +66,7 @@ public class Binary {
 As a result of switching from storing value as a integer to using this \texttt{Binary} class, it streamlined our implementation and provided a consistent way to manage binary values between the registers, memory and instructions whilst avoiding large amounts of conversion to and from integers.
 
 \subsection{Registers}
-Being the most core element of RISC-V, registers we the first component to be implemented. As per our design, each Register is represented as a instance of the \texttt{Register} class. As seen in Listing \ref{lst:register}, each register stores its name and alternate application binary interface name under the \texttt{name} and \texttt{nick} fields respectively, as well as a reference to its \texttt{Binary} instance storing the registers actual value.
+Being the most core element of RISC-V, registers were the first component to be implemented. As per our design, each Register is represented as a instance of the \texttt{Register} class. As seen in Listing \ref{lst:register}, each register stores its name and alternate application binary interface name under the \texttt{name} and \texttt{nick} fields respectively, as well as a reference to its \texttt{Binary} instance storing the registers actual value.
 
 \begin{lstlisting}[caption=Register Implementation, label=lst:register]
 public class Register {
@@ -155,7 +155,7 @@ It is important to note that a new \texttt{Register} instance is created here an
 A specific case is checked for registers. As per the RISC-V specification \cite{riscv_2015_riscv}, register \verb|x0| should not be writable, and remain a constant 0. Thus, we make a check for a write to this register, ignoring any that occur. This could pose an issue due to our reusable nature of the \texttt{RegisterSet} class. However, all of the extensions for RISC-V call for a constant 0 register, and if a new one should stray from this format, it is feasible to implement a check for if writing to 0 should be allowed or not.
 
 \subsection{Memory}
-\texttt{Memory} operates similarly to registers. However, memory is created on-demand as to not waste \ac{UI} and physical memory space as often values remain empty. The memory is also 4 byte aligned, rather than specifically addressed via apre-assigned name.
+\texttt{Memory} operates similarly to registers. However, memory is created on-demand as to not waste \ac{UI} and physical memory space as often values remain empty. The memory is also 4 byte aligned, rather than specifically addressed via a pre-assigned name.
 
 Each value in memory exists as an instance of the \texttt{MemoryValue} class. This class is a near carbon copy of the \texttt{Register} class in Listing \ref{lst:register}, with references to names removed, in turn of a reference to its location in memory. It may of been ideal to have both implement an interface representing the common methods. However due to their completely independent uses, this use of inheritance would of provided little functional benefit.
 
@@ -176,11 +176,11 @@ public MemoryValue load(MemoryAddress address) throws InvalidValueException, Reg
 }
 \end{lstlisting}
 
-In the \texttt{load} method we chose to do nothing with an exception raised from an invalid address as a result of \texttt{address.getAddress()} as all calls to load should be after a call to the \texttt{checkAddress} method. This method firstly checks if the address is an the valid format, returning the integer address or throwing an \texttt{InvalidMemoryAddressException}, then checking it is aligned by taking modulo 4 of the address, throwing a \texttt{UnalignedMemoryAccessException} if not aligned, with the method returning nothing for a successful address, or throwing one of the exceptions for an invalid address.
+In the \texttt{load} method we chose to do nothing with an exception raised from an invalid address as a result of \texttt{address.getAddress()} as all calls to load should be after a call to the \texttt{checkAddress} method. This method firstly checks if the address is in the valid format, returning the integer address or throwing an \texttt{InvalidMemoryAddressException}, then checking it is aligned by taking modulo 4 of the address, throwing a \texttt{UnalignedMemoryAccessException} if not aligned, with the method returning nothing for a successful address, or throwing one of the exceptions for an invalid address.
 
-The use of this slightly sophisticated memory address checking is required due to RISC-V's specification of memory addressing in the form of \verb|offset(register)| in which the given offset may be either a denary value, or a hexadecimal value. Each of which must specifically parsed, and checked, along with the actual register being checked to ensure it exists, as this format is not specific to the base 32 bit implementation. 
+The use of this slightly sophisticated memory address checking is required due to RISC-V's specification of memory addressing in the form of \verb|offset(register)| in which the given offset may be either a denary value, or a hexadecimal value. Each of which must be specifically parsed, and checked, along with the actual register being checked to ensure it exists, as this format is not specific to the base 32 bit implementation. 
 
-The exact implementation of the memory address parsing will be discussed further in the Parser section (\ref{sec:impl_parser}).
+The exact implementation of the memory address parsing will be discussed further in the Parser in section (\ref{sec:impl_parser}).
 
 \subsection{Singleton vs Dependency Injection}
 Within our register and memory implementation, both must be easily accessible to the rest of the program, especially instructions. There are two methods to achieving this: Singleton and Dependency Injection.
@@ -204,12 +204,12 @@ This pattern however does provide an issue. It promotes the use of static allowi
 However, this pattern was chosen based on reducing deeply nesting dependency injection and providing a singular instance of Registers and Memory, making it difficult to accidentally create another.
 
 \subsubsection{Dependency Injection}
-On the other hand, Dependency Injection is a \textbf{Design Pattern}. Working via the method of passing a given instance through function parameters such it may then be used. Dependency Injection doesn't determine how many instances may exists, but still provides the ability to make any instance available when needed.
+On the other hand, Dependency Injection is a \textbf{Design Pattern}. Working via the method of passing a given instance through function parameters such that it may then be used. Dependency Injection doesn't determine how many instances may exists, but still provides the ability to make any instance available when needed.
 
 An example of Dependency Injection can be seen when the optional nickname list is passed into the \texttt{RegisterSet} class in Listing
 \ref{lst:reg_set}. In this case an instance of a List is provided.
 
-Dependency Injection is useful for passing around any instance of a class, but can become convoluted when a instance is required far down a function tree, which results in parameter drilling, with many methods having the provide the instance as a parameter, to pass it down to the method that needs it, which is often resolved by refactoring large chunks of code, or by switching to a singleton pattern when possible.
+Dependency Injection is useful for passing around any instance of a class, but can become convoluted when an instance is required far down a function tree, which results in parameter drilling, with many methods having to provide the instance as a parameter, to pass it down to the method that needs it, which is often resolved by refactoring large chunks of code, or by switching to a singleton pattern when possible.
 
 \subsection{Instructions}
 The implementation of the instructions follows the design as outlined in Section \ref{sec:parser}, with an abstract \texttt{Instruction} class containing the base logic for every instruction. 
@@ -242,7 +242,7 @@ Listing \ref{lst:addi} is an example of the implemented \texttt{ADDI} instructio
 
 In order to use each instruction, they need to be managed and tracked within the emulator. This is done via a managment class called the \texttt{InstructionManager}. Internally it stores a map dta structure linking each instructions name to its implemented class, with a method provided to return the instruction with a given name if it exists.
 
-Before individual instructions can be used, each one must be registered to the \texttt{InstructionManager}. The naive approach would be to individually create an instance of each an add it to the map. However this would require writing \verb|new InstructionNameClass()| over 30 times. Instead we make use of the fact that Java allows us to instantiate classes programatically during run time. This is called reflection, in which code is able to inspect and modify other code.
+Before individual instructions can be used, each one must be registered to the \texttt{InstructionManager}. The naive approach would be to individually create an instance of each and add it to the map. However this would require writing \verb|new InstructionNameClass()| over 30 times. Instead we make use of the fact that Java allows us to instantiate classes programatically during run time. This is called reflection, in which code is able to inspect and modify other code.
 
 Within this we are able to dynamically load each class extending the abstract \texttt{Instruction} class. Instead of writing the complicated logic to locate and load each instance, we make use of the Reflections Library \cite{ronmamo_2022_ronmamoreflections}. We specify that we would like to load any class that is a sub type of \texttt{Instruction}, and then iterate over each, getting its constructor and creating a new instance. The library then adds this new instance to the instruction map using the individual instructions stored name. Listing \ref{lst:instr_load} demonstrates this ability as implemented in the emulator.
 
@@ -295,9 +295,9 @@ In order to make use of our \texttt{Instruction}'s, \texttt{Register}'s and \tex
 
 Parsing starts by taking user input and splitting it line by line as in Listing \ref{lst:parse_start}, then calling for each individual line to be parsed into its respective instruction call.
 
-Before an line can be parsed, a intermediate format must be established to hold a parsed instruction and its operands. The \texttt{ExecutableInstruction} class provides this. The \texttt{ExecutableInstruction} is a wrapper class that holds a reference to the respective instruction and its operands to be used during execution. In a similar fashion to the \texttt{Instruction} class it provides a \verb|execute()| method that is called to perform the actual physical execution of the Instruction, directly calling the referenced instructions execute method with the given operands as seen in Listing \ref{lst:ei_execute}. 
+Before a line can be parsed, an intermediate format must be established to hold a parsed instruction and its operands. The \texttt{ExecutableInstruction} class provides this. The \texttt{ExecutableInstruction} is a wrapper class that holds a reference to the respective instruction and its operands to be used during execution. In a similar fashion to the \texttt{Instruction} class it provides an \verb|execute()| method that is called to perform the actual physical execution of the Instruction, directly calling the referenced instructions execute method with the given operands as seen in Listing \ref{lst:ei_execute}. 
 
-This operation was chosen over directly calling the instruction as it simplifies the storing of instructions to be executed after parsing has complete. Without the wrapper both the instruction and operands to be run would have to be stored and fetched separately, and then combined. By using the \texttt{ExecutableInstruction} wrapper this double fetching and storing is eliminated with the wrapper automatically storing a reference to both and providing he combining to run the emulated instruction.
+This operation was chosen over directly calling the instruction as it simplifies the storing of instructions to be executed after parsing has complete. Without the wrapper both the instruction and operands to be run would have to be stored and fetched separately, and then combined. By using the \newline\texttt{ExecutableInstruction} wrapper this double fetching and storing is eliminated. The wrapper automatically stores a reference to both the instruction and operands then combining them to execute the emulated instruction.
 
 \begin{lstlisting}[caption=ExecutableInstruction class, label=lst:ei_execute]
 public class ExecutableInstruction {
@@ -341,7 +341,7 @@ public enum EParseElement {
 }
 \end{lstlisting}
 
-Each of which are specified in the \texttt{Instruction} class constructor as seeing in the \texttt{ADDI} example in listing \ref{lst:addi}, and then retrieved during this part of parsing based on the previously successfully parsed instruction:
+Each of which are specified in the \texttt{Instruction} class constructor as seen in the \texttt{ADDI} example in listing \ref{lst:addi}, and then retrieved during this part of parsing based on the previously successfully parsed instruction:
 \begin{lstlisting}
 instruction.getExpectedOps()
 \end{lstlisting}
@@ -362,7 +362,7 @@ public abstract class ParseElement<E> {
 }
 \end{lstlisting}
 
-For parsing an immediate we simply attempt to convert the immediate to a integer. This is performed by a few utility functions which first assess if the string is in hexadecimal by checking if it starts with "x0", then converting the hexadecimal value to an integer. On the other hand for a denary it simply attempts to cast the denary to an integer, returning it if either were valid. Both make use of Java's builtin \verb|Integer.parsetInt(valie, base)| which allows is to specify the base of the value to parse, in this case being 16 for hexadecimal and 10 for denary.
+For parsing an immediate we simply attempt to convert the immediate to an integer. This is performed by a few utility functions which first assess if the string is in hexadecimal by checking if it starts with "x0", then converting the hexadecimal value to an integer. On the other hand for a denary it simply attempts to cast the denary to an integer, returning it if either were valid. Both make use of Java's builtin \verb|Integer.parsetInt(valie, base)| which allows it to specify the base of the value to parse, in this case being 16 for hexadecimal and 10 for denary.
 
 For parsing a register we make use of Regex to identify a correct register. We adopt the following pattern: \verb|[a-z][0-9]{1,2}| which permits any lowercase letter once, and then between 1 and 2 digits for the register number. This allows us to parse register names efficiently. However, alternate names also need to be considered, which can be dealt with by simply querying if a register exists within the register set with the given name as seen in Listing \ref{lst:parse_reg}.
 
@@ -498,7 +498,7 @@ public ExecutableInstruction nextInstruction() {
 
 The program counter is represented by the \texttt{ProgramCounter} class, which extends the \texttt{Register} class, adding additional functionality to jump and increment its value in order to allow conditional branching and sequential instruction execution.
 
-Originally, execution called for the next instruction in the list by obtaining the index of the current instruction and adding one. This would of required branching instructions to directly interact with the emulation loop to permit branching. Thus, it followed to implement it like a physical processor would, wherein the next induction is the one at the location stored by the program counter. This allowed for a far easier to implementation of branch instructions.
+Originally, execution called for the next instruction in the list by obtaining the index of the current instruction and adding one. This would of required branching instructions to directly interact with the emulation loop to permit branching. Thus, it followed to implement it like a physical processor would, wherein the next induction is the one at the location stored by the program counter. This allowed for a far easier implementation of branch instructions.
 
 During each instructions execution, the \texttt{ExecutableInstruction} wrapper will call the individual \texttt{Instruction} instances \verb|execute| method passing in the respective \texttt{InstructionOperands} instance. This results in the emulation of the instruction, which once complete triggers a call for the next instruction to be executed.
 
@@ -573,7 +573,7 @@ As in Figure \ref{fig:fxml_view} the resulting visual layout is quite simple. Ho
 \subsubsection{Controllers}\label{sec:impl_emu_controllers}
 In order to interact with the FXML elements, JavaFX \cite{sunmicrosystems_2022_javafx} makes us of \texttt{Controller}'s. A controller is a class that contains the logic for interactive \ac{UI} elements.
 
-To connect the FXML elements to our code, JavaFX \cite{sunmicrosystems_2022_javafx} provides the \texttt{@FXML} annotation, which is specified on a variable representing the same element type as the FXML element. For example Listing \ref{lst:fxml_anno} shows how we would obtain a reference to the Run button in Figure \ref{fig:fxml_view}, and then attach a handler it to run code to start the emulation.
+To connect the FXML elements to our code, JavaFX \cite{sunmicrosystems_2022_javafx} provides the \texttt{@FXML} annotation, which is specified on a variable representing the same element type as the FXML element. For example Listing \ref{lst:fxml_anno} shows how we would obtain a reference to the Run button in Figure \ref{fig:fxml_view}, and then attach a handler to it in order to run code to start the emulation.
 
 \begin{lstlisting}[caption=FXML annotation for a button, label=lst:fxml_anno]
 @FXML
@@ -624,7 +624,7 @@ public void start(Stage stage) throws Exception {
 }
 \end{lstlisting}
 
-With this the \ac{UI} can be loaded and show to the end user, with all the interactive components linked up to the code for use by the emulator. With the final implemented design in Figure \ref{fig:final_implemented_design} taking into account our design considerations for colourblind users and visual impairments, as well as Nielson's Principles \cite{nielsen_2020_10}.
+With this the \ac{UI} can be loaded and shown to the end user, with all the interactive components linked up to the code for use by the emulator. With the final implemented design in Figure \ref{fig:final_implemented_design} taking into account our design considerations for colourblind users and visual impairments, as well as Nielson's Principles \cite{nielsen_2020_10}.
 
 \begin{figure}[H]
     \centering
@@ -674,15 +674,15 @@ public class PathBuilder {
 }
 \end{lstlisting}
 
-Due to the nature of building these paths and having them position correctly on screen, an additional invisible line has to be drawn for every path as seen in Listing \ref{lst:path_builder} on line 8. This was due to the fact that JavaFX \cite{sunmicrosystems_2022_javafx} defines (0,0) based on the first added line. Thus if a invisible line wasn't drawn, a line starting at 100,100 would appear in the very top left of the parent, instead of being at (100,100) as expected. Hence, drawing an invisible line first from 0,0 to our starting point alleviates this issue without impacting the visualisation.
+Due to the nature of building these paths and having them position correctly on screen, an additional invisible line has to be drawn for every path as seen in Listing \ref{lst:path_builder} on line 8. This was due to the fact that JavaFX \cite{sunmicrosystems_2022_javafx} defines (0,0) based on the first added line. Thus if an invisible line wasn't drawn, a line starting at 100,100 would appear in the very top left of the parent, instead of being at (100,100) as expected. Hence, drawing an invisible line first from 0,0 to our starting point alleviates this issue without impacting the visualisation.
 
-With the builder created we can use it to produce all the paths as seen in Figure \ref{fig:final_implemented_design}, with the following code used to produce the line connecting the \ac{IR} and \ac{ID} as seen in Listing \ref{lst:path_builder}:
-\begin{lstlisting}[caption=Example of use the path builder, label=lst:path_builder]
+With the builder created we can use it to produce all the paths as seen in Figure \ref{fig:final_implemented_design}, with the following code used to produce the line connecting the \ac{IR} and \ac{ID} as seen in Listing \ref{lst:path_builder_example}:
+\begin{lstlisting}[caption=Example of use the path builder, label=lst:path_builder_example]
 (new PercentagePathBuilder("IR_TO_ID", 20, 65, anim)).addPoint(36.25, 65).build().autoDraw(animationGroup, blue);
 \end{lstlisting}
 
 \subsubsection{Animating}
-With our ability to draw paths, we now need to be able to animate on top of the to show the flow of data. JavaFX \cite{sunmicrosystems_2022_javafx} provides a few transition methods, with the main two being \texttt{TranslateTransition} and \texttt{SequentialTransition}, which allows us to translate elements, and sequentially run transitions respectively.
+With our ability to draw paths, we now need to be able to animate on top of them to show the flow of data. JavaFX \cite{sunmicrosystems_2022_javafx} provides a few transition methods, with the main two being \texttt{TranslateTransition} and \texttt{SequentialTransition}, which allows us to translate elements, and sequentially run transitions respectively.
 
 The logic for the animating over a specific path is contained within the \texttt{Path} class. Much like for drawing paths, we loop over all of the paths points, this time creating a new \texttt{TranslateTransition} for each pair of points. The transition is told to translate the given data element by the difference between the coordinates, and to animate this in a linear fashion as seen is Listing \ref{lst:translate}.
 
@@ -710,7 +710,7 @@ sq.rateProperty().bind(MainWindowController.getInstance() .getAnimationSpeedSlid
 \end{lstlisting}
 With a value between 0 - 10 allowing for pausing at 0, to a very fast animation with a value of 10.
 
-With the ability to now animate over individual paths, a way to animate over multiple paths, as well as provide other actions need to be produces.
+With the ability to now animate over individual paths, a way to animate over multiple paths, as well as provide other actions need to be produced.
 
 A custom class called \texttt{Animator} (Listing \ref{lst:anim_stage}) handles this for us. Again it follows a builder pattern to build up animations, with each section being denoted as a \texttt{AnimatorStage}, which is an abstract class, providing a \verb|play()| method to be implemented for the respective stage, as well as providing a convenient \verb|next()| method to call the next stage from within each stage.
 
@@ -780,9 +780,9 @@ private void updateCUContent(String stageName, ExecutableInstruction ei, String.
 \end{lstlisting}
 
 \subsection{Callbacks and CompletableFutures}\label{sec:call_vs_cf}
-Within the \texttt{Animator} we make heavy use of callbacks to control the flow of animations, with the end of one stage, calling for the next to be played, and so on. This is permitted via the \texttt{AnimatorFinishedCallback} interface, which simply allows us to encapsulate logic to be execute later. Alongside the callback functions of the \texttt{SequentialTransition} the whole animation sequence is played out.
+Within the \texttt{Animator} we make heavy use of callbacks to control the flow of animations, with the end of one stage, calling for the next to be played, and so on. This is permitted via the \texttt{AnimatorFinishedCallback} interface, which simply allows us to encapsulate logic to be executed later. Alongside the callback functions of the \texttt{SequentialTransition} the whole animation sequence is played out.
 
-Whilst this system works, it is prone to a issue of having to nest callbacks in places. For example in the code to run the 5 animation sections discussed in the Integration Section \ref{sec:impl_integ}, the following code is used to control the conditional execution of instructions with no \verb|execute()| handler as seen in Listing \ref{lst:cond_call}
+Whilst this system works, it is prone to an issue of having to nest callbacks. For example in the code to run the 5 animation sections discussed in the Integration Section \ref{sec:impl_integ}, the following code is used to control the conditional execution of instructions with no \verb|execute()| handler as seen in Listing \ref{lst:cond_call}
 \begin{lstlisting}[caption=Conditional callback execution, label=lst:cond_call]
 decode.onFinish(() -> {
     if (execute != null) {
@@ -833,7 +833,7 @@ future.get()
 Currently the project doesn't make use of \texttt{CompletableFuture}'s, and this is something that will be refactored in in the future as it will require major breaking changes to the project code to implement.
 
 \subsection{Percentages over Coordinates}
-Within the implementation of paths an animations, path points were being stored as physical coordinates. Whilst this worked, it proved difficult to manually position the paths and box elements on screen. Coordinates had to be produces as a result of trial and error to position them perfectly. With this becoming much harder for ensuring paths overlaid on top of each other when they joined up, without producing a double thick path due to incorrect coordinates.
+Within the implementation of paths and animations, path points were being stored as physical coordinates. Whilst this worked, it proved difficult to manually position the paths and box elements on screen. Coordinates had to be produced as a result of trial and error to position them perfectly. With this becoming much harder for ensuring paths overlaid on top of each other when they joined up, without producing a double thick path due to incorrect coordinates.
 
 The intuitive solution was to switch to percentages. With percentages, each point was defined as a percentage of the width and height of the parent element, with (0\%,0\%) being in the top-left and (100\%,100\%) being in the bottom-right of the parent. This immediately made positioning paths and elements much quicker and easier, avoiding having to manually calculate element positions, leaving the application to automatically calculate these positions during run time.
 
@@ -966,7 +966,7 @@ public Animator write() {
 }
 \end{lstlisting}
 
-With these additional stages, any individually instruction can override any of the animations as required, or extend them to include extra details or disable them entirely. These can then be executed linearly as seen in Listing \ref{lst:complt_future} in Section \ref{sec:call_vs_cf} via callbacks.
+With these additional stages, any individual instruction can override any of the animations as required, or extend them to include extra details or disable them entirely. These can then be executed linearly as seen in Listing \ref{lst:complt_future} in Section \ref{sec:call_vs_cf} via callbacks.
 
 For more sophisticated animations and similar instructions, boilerplate code was refactored out into super-classes representing these similar instructions. For example the abstract \texttt{ALUCommonInstruction} class encapsulates the logic for instructions that take two registers and perform an arithmetic operation on them, providing a \verb|calc(int rs1, int rs2)| method than can be overridden by individual sub-classes such as the instruction class for \texttt{ADD} which can be seen in Listing \ref{lst:add_subclass}.
 
@@ -988,9 +988,9 @@ public class ADD extends ALUCommonInstruction {
 }
 \end{lstlisting}
 
-Further, the animations can also be abstracted away for these common instruction types. By abstracting this code out it become much more maintainable and follows the DRY (Don't Repeat Yourself) principle, with the code existing once, allowing for changes to reflect globally, instead of having to make the same change numerous times in different files.
+Further, the animations can also be abstracted away for these common instruction types. By abstracting this code out it becomes much more maintainable and follows the DRY (Don't Repeat Yourself) principle, with the code existing once, allowing for changes to reflect globally, instead of having to make the same change numerous times in different files.
 
-This resulted in the creation of the \texttt{ALUAnimationBuilder} class.  This class provides a quick way to specify the animation for an arithmetic operation on tow register values, supplying the operator, registers and output. Internally it manages the creation of the required \texttt{Animators} to allow for an animation of data flowing into the \ac{ALU} from the registers and then the operation being applied, before finally sending it back to the registers. The builder provides two functions \verb|buildExecute()| and \verb|buildWrite| which return the respective \texttt{Animators} for the Execute and Write animation sequence. 
+This resulted in the creation of the \texttt{ALUAnimationBuilder} class.  This class provides a quick way to specify the animation for an arithmetic operation on two register values, supplying the operator, registers and output. Internally it manages the creation of the required \texttt{Animators} to allow for an animation of data flowing into the \ac{ALU} from the registers and then the operation being applied, before finally sending it back to the registers. The builder provides two functions \verb|buildExecute()| and \verb|buildWrite| which return the respective \texttt{Animators} for the Execute and Write animation sequence. 
 
 On top of the \texttt{ALUAnimationBuilder}, there is also a \texttt{CommonAnimationsFactory} class which provides quick access to an instance of the \texttt{ALUAnimationBuilder}, as well as static methods to provide quick generation of common animations such as moving data between the registers and \ac{ALU} and sending signals to various components, allowing much faster building of animation sequences instead of having to manually write the same lines over and over again, as seen in Listing \ref{lst:dry}
 
@@ -1015,9 +1015,9 @@ public static Animator regToALU(Animator animator, Binary value, ALUConnection c
 \end{lstlisting}
 
 \subsection{Memory and Registers}
-The registers and memory both require a suitable representation on screen, with a table being the most ideal. Currently both register and memory values are just simply dumped as text onto the screen. Thankfully JavaFX \cite{sunmicrosystems_2022_javafx} provides a element called \texttt{TableView} which allows us to generate tables and fill them with data that can be updated in real time.
+The registers and memory both require a suitable representation on screen, with a table being the most ideal. Currently both register and memory values are just simply dumped as text onto the screen. Thankfully JavaFX \cite{sunmicrosystems_2022_javafx} provides an element called \texttt{TableView} which allows us to generate tables and fill them with data that can be updated in real time.
 
-For both the registers and memory the tables being as an FXML element with the 4 columns (Register/Location, Denary, Hex and Binary) already pre-set, but with no data. Within the \texttt{RegisterController} and \texttt{MemoryController} references are obtained to both the table element and each individual column. With this we can specify a value factory for each column, these value factory will automatically pull a value from the passed class. They do this by us specifying the name of the function that returns each respective value, omitting "get" from them, in this case we can see in Listing \ref{lst:table_view} that for the location, denary, hex and binary we specify the respective function name on the \texttt{Register} class. Now when passing a list of \texttt{Register}'s from the \texttt{RegisterSet} instance, the table will automatically fill each row with the required data.
+For both the registers and memory the tables begin as an FXML element with 4 columns (Register/Location, Denary, Hex and Binary) already pre-set, but with no data. Within the \texttt{RegisterController} and \texttt{MemoryController} references are obtained to both the table element and each individual column. With this we can specify a value factory for each column, these value factory will automatically pull a value from the passed class. They do this by us specifying the name of the function that returns each respective value, omitting "get" from them, in this case we can see in Listing \ref{lst:table_view} that for the location, denary, hex and binary we specify the respective function name on the \texttt{Register} class. Now when passing a list of \texttt{Register}'s from the \texttt{RegisterSet} instance, the table will automatically fill each row with the required data.
 
 \begin{lstlisting}[caption=\texttt{RegisterController} code to obtain column values, label=lst:table_view]
 location.setCellValueFactory(new PropertyValueFactory<>("Name")); // will call Register#getName()
@@ -1029,7 +1029,7 @@ binary.setCellValueFactory(new PropertyValueFactory<>("Value")); // will call Re
 The memory operates the same for attaching column values, however both controllers make use of slightly different mechanisms to refresh the table data. The register table always maintains a list of the 32 base register, calling for the register values to be re-fetched on refresh. On the other hand due to memory's dynamic nature, each refresh makes a call to the \texttt{Memory} instance, to obtain a fresh list of any available memory cells, automatically sorting them via the location in an ascending nature.
 
 \subsubsection{The Early Update Problem}\label{sec:early_update_prob}
-The table views work exceptionally well with no issues themselves. However, during testing a problem in which when writing to a register, the value in the table would update before the write animation had finished. This caused some confusion as it implied that any register changes are written instantly, which may seem the case in the real world, but there will be a small quantity of time of which the data is travelling, which the simulator should also display.
+The table views work exceptionally well with no issues themselves. However, during testing the problem emerged in which when writing to a register, the value in the table would update before the write animation had finished. This caused some confusion as it implied that any register changes are written instantly, which may seem the case in the real world, but there will be a small quantity of time where the data is travelling, which the simulator should also display.
 
 The root of the problem was due to the writing of register values being separate to the animation sequence. Register values are set via a \verb|write| class on the \texttt{RegisterSet} class. However, this executes instantly which originally wasn't considered an issue with registers updating once each instruction has finished executing. Unfortunately, due to the callback nature, this refreshing was often called mid way through execution resulting in the emulation being one induction ahead of the visualisation, resulting in register updating before the animation had ended.
 
@@ -1065,7 +1065,7 @@ public void refresh() {
 \end{lstlisting}
 
 \subsection{Pushing updates}
-Within some of the visual animation components, it was imperative that their text updated during animations. This required a way to push updated information to them. A common way to create this functionality is creating an even/bind. For the project, a generic \texttt{Bind} interface was created which simply provides a \verb|execute(E value)| method. Generics have been made us of here so that a bind may update any kind of value. 
+Within some of the visual animation components, it was imperative that their text updated during animations. This required a way to push updated information to them. A common way to create this functionality is creating an even/bind. For the project, a generic \texttt{Bind} interface was created which simply provides an \verb|execute(E value)| method. Generics have been made use of here so that a bind may update any kind of value. 
 
 A bind is created by simply creating a new instance of a bind and implementing the \verb|execute(...)| method. It can then be called by running \verb|bind.execute(...)|. This allowed for the simple updating of the \ac{ALU} text with Listing \ref{lst:bind} showing how the a bind is created to provide a \texttt{Binary} instance and set the respective text value as well as how the \texttt{ALUStage} calls the bind with a \texttt{Binary} instance.
 
@@ -1107,9 +1107,9 @@ Later in development, when the stage of implementing additional RISC-V \cite{fxm
 
 To re-iterate from the start of this section: We refer to modules as the encapsulation of logic that allows us to implement a RISC-V extension such as Multiply and Divide.
 
-Modules exist as a implementation of the \texttt{VRVSModule} interface in Listing \ref{lst:vrvs_interface}. Every created module must have their main class implement the 3 provided methods, to allow for the main application to identify each module, and also enable/disable it.
+Modules exist as an implementation of the \texttt{VRVSModule} interface in Listing \ref{lst:vrvs_interface}. Every created module must have their main class implement the 3 provided methods, to allow for the main application to identify each module, and also enable/disable it.
 
-\begin{lstlisting}[caption=\texttt{VRVSModule} interface for creating new modules]
+\begin{lstlisting}[caption=\texttt{VRVSModule} interface for creating new modules, label=lst:vrvs_interface]
 public interface VRVSModule {
     String getName();
 
@@ -1135,22 +1135,22 @@ The \texttt{LoadedModule} wrapper exist to provide extra functionality to handli
 All of these \texttt{LoadedModule}'s are managed by a \texttt{ModuleManager} instance, which holds a reference to every module, and provides functions to load internal and external modules, delete modules and ensure that the required directory structure exists for storing modules. It further provides a simple way to initiate the module system by simply instantiating the \texttt{ModuleManager} class and calling \verb|start()|, and then completely cleaning up on application close by calling \verb|end()|.
 
 \subsection{\ac{UI} Additions}
-Currently modules can only be added or removed by manually placing them into the created modules folder on a users system. Thus a easier way to manage modules via the application was implemented through the use of a popup window.
+Currently modules can only be added or removed by manually placing them into the created modules folder on a users system. Thus an easier way to manage modules via the application was implemented through the use of a popup window.
 
-As based on its design the window contains a table listing the loaded modules, and if they are enabled or not, with buttons below to add and delete modules, which can be seen in Figure \ref{fig:module_popup}.
+As based on its design the window contains a table listing the loaded modules, and if they are enabled or not, with buttons below to add and delete modules, which can be seen in Figure \ref{fig:module_popup_imp}.
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.5\textwidth]{dissertation/DATA/module_popup.jpg}
     \caption{Implemented Module Popup}
-    \label{fig:module_popup}
+    \label{fig:module_popup_imp}
 \end{figure}
 
-The popup is designed using FXML residing in the \texttt{modules.fxml} file, with interactivity added via the \texttt{NewModulePopup} controller. Each row of the table contains the modules name and a checkbox to enable and disable the module. On toggling a module a popup is show to confirm the actions completion.
+The popup is designed using FXML residing in the \texttt{modules.fxml} file, with interactivity added via the \texttt{NewModulePopup} controller. Each row of the table contains the modules name and a checkbox to enable and disable the module. On toggling a module a popup is shown to confirm the actions completion.
 
-Additionally, the very first column of the table has he option to display a checkbox for externally added modules. This permit the user o select one or more modules and then click delete. This will ask the user to confirm their decision before the module system unloads and deletes the specified modules.
+Additionally, the very first column of the table has the option to display a checkbox for externally added modules. This permits the user to select one or more modules and then click delete. This will ask the user to confirm their decision before the module system unloads and deletes the specified modules.
 
-\section{Additional Features}
+\section{Additional Features}\label{sec:add_feat}
 \subsection{File Saving/Loading}
 The majority of code emulators and simulators permit the saving and loading of user written code, and so shall the project.
 
@@ -1182,7 +1182,7 @@ fileSave.setOnAction(e -> {
 \subsection{Animation Toggling}
 In some cases a user may not want to simulate their code, and instead just emulate it jumping straight to the end results. To allow for this a toggle was implemented which disables the execution of animations.
 
-This required slight modification to aspects of the emulation code, mainly by passing in the animations toggle into the \texttt{Program} instance, which in turn passes it to each \texttt{ExecutableInstruction} instance. Then when each \texttt{ExecutableInstruction} is executed, if animations are disabled it will only call the referenced instructions \verb|execute(...)| method, ignoring the fetch, decode, memory and write animations. Immediately calling for the execution of the next instruction, ignoring the returned Animator from the \verb|execute()| method as well.
+This required slight modification to aspects of the emulation code, mainly by passing in the animations toggle into the \texttt{Program} instance, which in turn passes it to each \texttt{ExecutableInstruction} instance. Then when each \newline \texttt{ExecutableInstruction} is executed, if animations are disabled it will only call the referenced instructions \verb|execute(...)| method, ignoring the fetch, decode, memory and write animations. Immediately calling for the execution of the next instruction, ignoring the returned Animator from the \verb|execute()| method as well.
 
 Due to changes to fix the early register updating problem, a check also had to be added here to override this fix for disabled animations, otherwise register writes would never hit the actual registers, causing all operations to result in 0. This modification can be seen in Listing \ref{lst:noAnimModifi}.
 
